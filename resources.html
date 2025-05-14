@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resources</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="logo.png" alt="Gen AI Global Logo" class="logo">
+        </header>
+        <main>
+            <h1>Resources</h1>
+            <p>Access AI-related articles, case studies, and learning materials.</p>
+
+            <!-- Dropdown for Tags -->
+            <label for="tagDropdown">Filter by Tag:</label>
+            <select id="tagDropdown">
+                <option value="all">All</option>
+            </select>
+
+            <!-- Resources List -->
+            <div id="resourcesList">
+                <!-- Dynamic content will be loaded here -->
+            </div>
+        </main>
+        <footer>
+            <p>&copy; 2024 Gen AI Global. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Fetch resources data and populate dropdown and resources list
+        fetch('resources-data.json')
+            .then(response => response.json())
+            .then(data => {
+                const tagDropdown = document.getElementById('tagDropdown');
+                const resourcesList = document.getElementById('resourcesList');
+
+                // Extract unique tags
+                const tags = [...new Set(data.map(resource => resource.tag))];
+
+                // Sort tags alphabetically
+                tags.sort();
+
+                // Populate dropdown with unique tags
+                tags.forEach(tag => {
+                    const option = document.createElement('option');
+                    option.value = tag;
+                    option.textContent = tag;
+                    tagDropdown.appendChild(option);
+                });
+
+                // Function to display resources based on selected tag
+                const displayResources = (selectedTag) => {
+                    resourcesList.innerHTML = ''; // Clear existing content
+
+                    const filteredResources = selectedTag === 'all' ? data : data.filter(resource => resource.tag === selectedTag);
+
+                    filteredResources.forEach(resource => {
+                        const resourceDiv = document.createElement('div');
+                        resourceDiv.className = 'resource-item';
+
+                        resourceDiv.innerHTML = `
+                            <h2>${resource.title}</h2>
+                            <p>${resource.description}</p>
+                            <p><strong>Author:</strong> ${resource.author}</p>
+                            <p><strong>Date:</strong> ${new Date(resource.date).toLocaleDateString()}</p>
+                            <a href="${resource.resource_url}" target="_blank">Read More</a>
+                        `;
+
+                        resourcesList.appendChild(resourceDiv);
+                    });
+                };
+
+                // Initial display of all resources
+                displayResources('all');
+
+                // Event listener for dropdown change
+                tagDropdown.addEventListener('change', (event) => {
+                    displayResources(event.target.value);
+                });
+            })
+            .catch(error => console.error('Error loading resources:', error));
+    </script>
+</body>
+</html>

@@ -90,6 +90,19 @@ footer {
     padding: 2rem 0;
 }
 
+.top-nav {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background-color: transparent; /* Initially matches the page background */
+    transition: background-color 0.3s ease; /* Smooth transition for color change */
+}
+
+.top-nav.scrolled {
+    background-color: #ffffff; /* Solid color when scrolling */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add a subtle shadow */
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 1rem;
@@ -114,4 +127,4 @@ footer {
     .features {
         grid-template-columns: 1fr;
     }
-} 
+}
