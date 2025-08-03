@@ -1,0 +1,25 @@
+{
+  "logo": "logo.png",
+  "nav": [
+    {"label": "Home", "link": "index.html"},
+    {"label": "About Us", "link": "about-us.html"},
+    {"label": "Community", "link": "community.html"},
+    {"label": "Events", "link": "events.html"},
+    {"label": "Resources", "link": "resources.html"},
+    {"label": "Get Involved", "link": "get-involved.html"},
+    {"label": "Spotlight", "link": "spotlight.html"},
+    {"label": "Log In", "link": "log-in.html"}
+  ],
+  "hero": {
+    "title": "Welcome to Gen AI Global",
+    "subtitle": "Transforming the future through artificial intelligence"
+  },
+  "mission": "Democratize AI knowledge across industries to foster collaboration, accelerate innovation, and drive cross-sector growth.",
+  "features": [
+    {"title": "Innovation", "text": "Pushing the boundaries of what's possible with AI"},
+    {"title": "Global Impact", "text": "Creating solutions that benefit humanity worldwide"},
+    {"title": "Expertise", "text": "Led by industry leaders in artificial intelligence"}
+  ],
+  "welcomeVideo": "https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7325375681414971392?compact=1",
+  "footer": "\u00a9 2024 Gen AI Global. All rights reserved."
+}
