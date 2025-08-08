@@ -1,26 +1,22 @@
 
-import { ArrowLeft, CheckCircle, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import { motion } from "framer-motion";
-import { useEffect } from 'react';
+import SEO from '@/components/SEO';
 import PageLayout from '@/components/PageLayout';
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Card, CardContent } from "@/components/ui/card";
+import OrgChart3D from '@/components/OrgChart3D';
 
 const About = () => {
-  // Scroll to top on mount
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-  
   return (
     <PageLayout showContact={false}>
-      <section className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
-        <div className="container mx-auto max-w-4xl">
-          <h1 className="text-4xl font-bold mb-6">About Gen AI Global</h1>
-          <p className="text-muted-foreground">Content Pending — verified mission and background copy will be added here.</p>
+      <SEO
+        title="About Us — Gen AI Global Organization"
+        description="Explore Gen AI Global's organizational structure in an interactive, searchable org chart."
+      />
+      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto max-w-6xl">
+          <h1 className="text-3xl sm:text-4xl font-bold mb-2">About Gen AI Global</h1>
+          <p className="text-muted-foreground mb-8">Interactive organizational chart with search, zoom/pan, collapsible groups, and export options.</p>
+          <OrgChart3D />
         </div>
-      </section>
+      </main>
     </PageLayout>
   );
 };
