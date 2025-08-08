@@ -22,7 +22,7 @@ const GetInvolved = () => {
   return (
     <PageLayout showContact={false}>
       <SEO title="Get Involved — Gen AI Global" description="Volunteer form — static, no authentication." />
-      <main className="pt-24 section-container max-w-xl mx-auto">
+      <main className="pt-16 md:pt-20 section-container max-w-xl mx-auto">
         <h1 className="text-3xl font-bold mb-4">Get Involved</h1>
         <p className="text-muted-foreground mb-6">Choose an interest area and submit the form. Labels are verified; processing is static.</p>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">

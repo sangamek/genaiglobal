@@ -10,7 +10,7 @@ const Community = () => {
   return (
     <PageLayout showContact={false}>
       <SEO title="Community — Gen AI Global" description="Gen AI Global community hub with LinkedIn updates and Discord access." />
-      <main className="pt-24 section-container">
+      <main className="pt-16 md:pt-20 section-container">
         <h1 className="text-3xl sm:text-4xl font-bold mb-6">Gen AI Global Community</h1>
         <p className="text-muted-foreground mb-10">Connect with our community. Follow our latest updates on LinkedIn and join the conversation on Discord.</p>
 

@@ -10,7 +10,7 @@ const About = () => {
         title="About Us — Gen AI Global Organization"
         description="Explore Gen AI Global's organizational structure in an interactive, searchable org chart."
       />
-      <main className="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+      <main className="pt-16 md:pt-20 pb-16 px-4 sm:px-6 lg:px-8">
         <div className="container mx-auto max-w-6xl">
           <h1 className="text-3xl sm:text-4xl font-bold mb-2">About Gen AI Global</h1>
           <p className="text-muted-foreground mb-8">Interactive organizational chart with search, zoom/pan, collapsible groups, and export options.</p>

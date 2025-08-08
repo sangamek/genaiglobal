@@ -114,7 +114,7 @@ const DevelopmentProcess = () => {
     description: "Post-launch analytics and feedback loops drive ongoing improvements, updates, and potential new features."
   }];
   return <PageLayout>
-      <section className="pt-24 pb-16">
+      <section className="pt-16 md:pt-20 pb-16">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl mx-auto">
             <Link to="/" className="flex items-center text-gray-500 hover:text-gray-700 mb-8">

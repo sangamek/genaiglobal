@@ -5,7 +5,7 @@ const Events = () => {
   return (
     <PageLayout showContact={false}>
       <SEO title="Events — Gen AI Global" description="Upcoming events — content pending verification." />
-      <main className="pt-24 section-container">
+      <main className="pt-16 md:pt-20 section-container">
         <h1 className="text-3xl font-bold mb-4">Events</h1>
         <p className="text-muted-foreground">Content Pending — event list will be added when confirmed.</p>
       </main>

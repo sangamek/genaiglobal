@@ -5,7 +5,7 @@ const Resources = () => {
   return (
     <PageLayout showContact={false}>
       <SEO title="Resources — Gen AI Global" description="Resource library — placeholder table until verified data is available." />
-      <main className="pt-24 section-container">
+      <main className="pt-16 md:pt-20 section-container">
         <h1 className="text-3xl font-bold mb-4">Resources</h1>
         <div className="overflow-x-auto">
           <table className="min-w-full border">

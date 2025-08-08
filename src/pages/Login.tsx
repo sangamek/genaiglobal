@@ -5,7 +5,7 @@ const Login = () => {
   return (
     <PageLayout showContact={false}>
       <SEO title="Log In — Gen AI Global" description="Static login — no authentication." />
-      <main className="pt-24 section-container max-w-sm mx-auto">
+      <main className="pt-16 md:pt-20 section-container max-w-sm mx-auto">
         <h1 className="text-3xl font-bold mb-4">Log In</h1>
         <p className="text-muted-foreground mb-4">Static only — no authentication.</p>
         <form className="space-y-4">
