@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Menu, X, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { NavigationMenu, NavigationMenuContent, NavigationMenuItem, NavigationMenuLink, NavigationMenuList, NavigationMenuTrigger, navigationMenuTriggerStyle } from "@/components/ui/navigation-menu";
 
 const Navbar = () => {
@@ -21,6 +21,9 @@ const Navbar = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const location = useLocation();
+  const isActive = (to: string) => location.pathname === to;
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -67,14 +70,20 @@ const Navbar = () => {
                   { to: '/login', label: 'Log In' },
                 ].map((item) => (
                   <NavigationMenuItem key={item.to}>
-                    <Link to={item.to}>
-                      <NavigationMenuLink className={cn(
+                    <NavigationMenuLink
+                      asChild
+                      className={cn(
                         navigationMenuTriggerStyle(),
-                        "text-[hsl(var(--primary-foreground))] bg-transparent hover:bg-transparent hover:text-[hsl(var(--accent))]"
-                      )}>
+                        "bg-transparent hover:bg-transparent",
+                        isActive(item.to)
+                          ? "text-[hsl(var(--accent))] underline underline-offset-4"
+                          : "text-[hsl(var(--primary-foreground))]"
+                      )}
+                    >
+                      <Link to={item.to} aria-current={isActive(item.to) ? 'page' : undefined}>
                         {item.label}
-                      </NavigationMenuLink>
-                    </Link>
+                      </Link>
+                    </NavigationMenuLink>
                   </NavigationMenuItem>
                 ))}
               </NavigationMenuList>
@@ -106,7 +115,11 @@ const Navbar = () => {
             <Link
               key={item.to}
               to={item.to}
-              className="block px-3 py-1.5 rounded-md text-sm text-[hsl(var(--foreground))] hover:text-[hsl(var(--accent))]"
+              aria-current={isActive(item.to) ? 'page' : undefined}
+              className={cn(
+                "block px-3 py-1.5 rounded-md text-sm",
+                isActive(item.to) ? "text-[hsl(var(--accent))] font-semibold" : "text-[hsl(var(--foreground))]"
+              )}
               onClick={() => { setIsMenuOpen(false); window.scrollTo(0,0); }}
             >
               {item.label}
