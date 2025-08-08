@@ -17,21 +17,20 @@ interface SEOProps {
 }
 
 const SEO: React.FC<SEOProps> = ({
-  title = 'WRLDS',
-  description = 'WRLDS Technologies: Pioneering smart engineering solutions with textile sensors for sports, safety, and performance monitoring.',
+  title = 'Gen AI Global — Responsible AI Community',
+  description = 'Gen AI Global: An open, responsible AI community. Content pending verification.',
   type = 'website',
-  name = 'WRLDS Technologies',
-  imageUrl = '/lovable-uploads/48ecf6e2-5a98-4a9d-af6f-ae2265cd4098.png',
+  name = 'Gen AI Global',
+  imageUrl = '/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png',
   publishDate,
   modifiedDate,
   author,
   category,
-  keywords = ['smart textiles', 'wearable technology', 'textile sensors', 'sports tech', 'safety monitoring', 'performance analytics'],
+  keywords = ['Gen AI Global', 'responsible AI', 'AI community', 'education', 'research', 'volunteer'],
   isBlogPost = false
 }) => {
-  const location = useLocation();
-  const currentUrl = `https://wrlds.com${location.pathname}`;
-  const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `https://wrlds.com${imageUrl}`;
+  const currentUrl = `https://genaiglobal.org${location.pathname}`;
+  const absoluteImageUrl = imageUrl.startsWith('http') ? imageUrl : `https://genaiglobal.org${imageUrl}`;
 
   // Enhanced keywords for specific posts
   const enhancedKeywords = location.pathname.includes('smart-ppe-revolution') 
@@ -71,18 +70,12 @@ const SEO: React.FC<SEOProps> = ({
   const organizationStructuredData = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'WRLDS Technologies',
-    url: 'https://wrlds.com',
-    logo: 'https://wrlds.com/lovable-uploads/14ea3fe0-19d6-425c-b95b-4117bc41f3ca.png',
-    description: 'Pioneering smart engineering solutions with textile sensors',
-    contactPoint: {
-      '@type': 'ContactPoint',
-      contactType: 'customer service',
-      email: 'info@wrlds.com'
-    },
+    name: 'Gen AI Global',
+    url: 'https://genaiglobal.org',
+    logo: 'https://genaiglobal.org/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png',
+    description: 'An open, responsible AI community.',
     sameAs: [
-      'https://www.linkedin.com/company/wrlds-technologies',
-      'https://twitter.com/wrldstechnologies'
+      'https://www.linkedin.com/company/gen-ai-global/'
     ]
   };
 
@@ -105,19 +98,19 @@ const SEO: React.FC<SEOProps> = ({
     dateModified: modifiedDate || publishDate,
     author: {
       '@type': 'Organization',
-      name: author || 'WRLDS Technologies',
-      url: 'https://wrlds.com'
+      name: author || 'Gen AI Global',
+      url: 'https://genaiglobal.org'
     },
     publisher: {
       '@type': 'Organization',
-      name: 'WRLDS Technologies',
+      name: 'Gen AI Global',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://wrlds.com/lovable-uploads/14ea3fe0-19d6-425c-b95b-4117bc41f3ca.png',
+        url: 'https://genaiglobal.org/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png',
         width: 512,
         height: 512
       },
-      url: 'https://wrlds.com'
+      url: 'https://genaiglobal.org'
     },
     description: description,
     keywords: enhancedKeywords.join(', '),
@@ -211,12 +204,12 @@ const SEO: React.FC<SEOProps> = ({
       <meta property="og:image" content={absoluteImageUrl} />
       <meta property="og:image:width" content="1200" />
       <meta property="og:image:height" content="630" />
-      <meta property="og:site_name" content="WRLDS Technologies" />
+      <meta property="og:site_name" content="Gen AI Global" />
       <meta property="og:locale" content="en_US" />
       {isBlogPost && category && <meta property="article:section" content={category} />}
       {isBlogPost && publishDate && <meta property="article:published_time" content={publishDate} />}
       {isBlogPost && modifiedDate && <meta property="article:modified_time" content={modifiedDate} />}
-      {isBlogPost && <meta property="article:publisher" content="https://wrlds.com" />}
+      {isBlogPost && <meta property="article:publisher" content="https://genaiglobal.org" />}
       
       {/* Twitter */}
       <meta name="twitter:card" content="summary_large_image" />
@@ -224,8 +217,8 @@ const SEO: React.FC<SEOProps> = ({
       <meta name="twitter:title" content={title} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={absoluteImageUrl} />
-      <meta name="twitter:site" content="@wrldstechnologies" />
-      <meta name="twitter:creator" content="@wrldstechnologies" />
+      <meta name="twitter:site" content="" />
+      <meta name="twitter:creator" content="" />
       
       {/* LinkedIn specific */}
       <meta property="og:image:secure_url" content={absoluteImageUrl} />

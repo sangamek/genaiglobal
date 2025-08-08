@@ -34,7 +34,7 @@ const Footer = () => {
         from_name: "Website Subscriber",
         from_email: email,
         message: `New subscription request from the website footer.`,
-        to_name: 'WRLDS Team',
+        to_name: 'Gen AI Global',
         reply_to: email
       };
       
@@ -66,25 +66,21 @@ const Footer = () => {
   };
 
   return (
-    <footer id="contact" className="bg-black text-white pt-16 pb-8 w-full">
+    <footer id="footer" className="bg-black text-white pt-16 pb-8 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 pb-10 border-b border-gray-700">
           <div className="lg:col-span-2">
             <img 
-              src="/lovable-uploads/7d120ee6-3614-4b75-9c35-716d54490d67.png" 
-              alt="WRLDS Technologies Logo" 
-              className="h-10 w-auto mb-6 invert" // Added invert to make logo white
+              src="/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png" 
+              alt="Gen AI Global Logo" 
+              className="h-10 w-auto mb-6" 
             />
             <p className="text-gray-300 mb-6">
-              WRLDS Technologies provides an end-to-end platform for the creation and deployment of AI-powered smart sensor devices, giving customers 100% ownership while handling the complete technological development.
-            </p>
-            <p className="text-gray-300 mb-6">
-              Hornsgatan 110<br />
-              117 26, Stockholm Sweden
+              Content Pending — verified organization summary will appear here.
             </p>
             <div className="flex space-x-4">
               <a 
-                href="https://www.linkedin.com/company/wrldstechnologies/" 
+                href="https://www.linkedin.com/company/gen-ai-global/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
@@ -98,46 +94,26 @@ const Footer = () => {
             <h3 className="text-lg font-bold mb-4 text-white">Company</h3>
             <ul className="space-y-3">
               <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/careers" className="text-gray-300 hover:text-white transition-colors">Careers</Link></li>
-              <li><Link to="/privacy-policy" className="text-gray-300 hover:text-white transition-colors">Privacy Policy</Link></li>
+              <li><Link to="/community" className="text-gray-300 hover:text-white transition-colors">Community</Link></li>
+              <li><Link to="/resources" className="text-gray-300 hover:text-white transition-colors">Resources</Link></li>
+              <li><Link to="/get-involved" className="text-gray-300 hover:text-white transition-colors">Get Involved</Link></li>
+              <li><Link to="/spotlight" className="text-gray-300 hover:text-white transition-colors">Spotlight</Link></li>
             </ul>
           </div>
           
           <div>
-            <h3 className="text-lg font-bold mb-4 text-white">Get in Touch</h3>
-            <form className="space-y-4" onSubmit={handleSubscribe}>
-              <div>
-                <input 
-                  type="email" 
-                  placeholder="Your email" 
-                  className="w-full px-4 py-2 bg-gray-800 border border-gray-700 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-600 text-white placeholder-gray-400"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={isSubmitting}
-                />
-              </div>
-              <button 
-                type="submit" 
-                className="w-full px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-600 transition-colors flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? "Subscribing..." : (
-                  <>
-                    Subscribe
-                    <ArrowRight className="ml-2 w-4 h-4" />
-                  </>
-                )}
-              </button>
-            </form>
+            <h3 className="text-lg font-bold mb-4 text-white">Legal</h3>
+            <p className="text-gray-400">Privacy Policy — Terms of Service (Content Pending)</p>
           </div>
         </div>
         
         <div className="pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm mb-4 md:mb-0">
-            © {new Date().getFullYear()} WRLDS Technologies. All rights reserved.
+            © {new Date().getFullYear()} Gen AI Global. All rights reserved.
           </p>
-          <div className="flex space-x-6">
-            <Link to="/privacy-policy" className="text-sm text-gray-400 hover:text-white transition-colors">Privacy Policy</Link>
+          <div className="flex space-x-6 text-gray-400 text-sm">
+            <span>Privacy Policy</span>
+            <span>Terms of Service</span>
           </div>
         </div>
       </div>
