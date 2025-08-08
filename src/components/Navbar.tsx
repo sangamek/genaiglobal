@@ -23,7 +23,10 @@ const Navbar = () => {
   }, []);
 
   const location = useLocation();
-  const isActive = (to: string) => location.pathname === to;
+  const isActive = (to: string) => {
+    if (to === '/') return location.pathname === '/';
+    return location.pathname === to || location.pathname.startsWith(`${to}/`);
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -118,7 +121,7 @@ const Navbar = () => {
               aria-current={isActive(item.to) ? 'page' : undefined}
               className={cn(
                 "block px-3 py-1.5 rounded-md text-sm",
-                isActive(item.to) ? "text-[hsl(var(--accent))] font-semibold" : "text-[hsl(var(--foreground))]"
+                isActive(item.to) ? "text-[hsl(var(--accent))] underline underline-offset-4 font-semibold" : "text-[hsl(var(--foreground))]"
               )}
               onClick={() => { setIsMenuOpen(false); window.scrollTo(0,0); }}
             >
