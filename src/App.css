@@ -1,11 +1,10 @@
 
 #root {
-  width: 100vw; /* Changed from width: 100% to 100vw */
-  max-width: 100%; /* Added max-width to prevent horizontal scrolling */
+  width: 100%;
+  max-width: 100%;
   margin: 0;
   padding: 0;
-  text-align: center;
-  overflow-x: hidden; /* Added to prevent horizontal scrollbar */
+  overflow-x: hidden; /* Prevent horizontal scrollbar */
 }
 
 .logo {

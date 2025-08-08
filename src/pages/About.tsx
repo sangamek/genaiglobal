@@ -14,7 +14,9 @@ const About = () => {
         <div className="container mx-auto max-w-6xl">
           <h1 className="text-3xl sm:text-4xl font-bold mb-2">About Gen AI Global</h1>
           <p className="text-muted-foreground mb-8">Interactive organizational chart with search, zoom/pan, collapsible groups, and export options.</p>
-          <OrgChart3D />
+          <div className="relative h-[70vh] sm:h-[75vh] lg:h-[80vh] overflow-hidden rounded-lg border bg-card">
+            <OrgChart3D />
+          </div>
         </div>
       </main>
     </PageLayout>
