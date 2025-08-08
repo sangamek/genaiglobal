@@ -66,7 +66,7 @@ const Footer = () => {
   };
 
   return (
-    <footer id="footer" className="bg-black text-white pt-16 pb-8 w-full">
+    <footer id="footer" className="bg-[hsl(var(--footer))] text-[hsl(var(--footer-foreground))] pt-16 pb-8 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 pb-10 border-b border-gray-700">
           <div className="lg:col-span-2">
@@ -85,7 +85,7 @@ const Footer = () => {
                 rel="noopener noreferrer" 
                 className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center text-gray-300 transition-colors hover:bg-gray-700 hover:text-white"
               >
-                <Linkedin size={20} />
+                <Linkedin size={22} />
               </a>
             </div>
           </div>

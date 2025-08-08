@@ -35,6 +35,10 @@
     --input: 0 0% 90%;
     --ring: 0 0% 50%;
 
+    /* Additional semantic tokens */
+    --footer: 0 0% 0%;           /* #000000 */
+    --footer-foreground: 0 0% 100%; /* #FFFFFF */
+
     --radius: 0.5rem;
   }
 }
@@ -56,7 +60,7 @@
 }
 
 .section-container {
-  @apply w-full px-4 sm:px-6 lg:px-8 py-12;
+  @apply w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12;
 }
 
 .hover-lift {

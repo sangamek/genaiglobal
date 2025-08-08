@@ -12,9 +12,9 @@ const Index = () => {
         keywords={['Gen AI Global', 'responsible AI', 'AI community', 'education', 'research']}
       />
       <main className="pt-24 section-container">
-        <header className="max-w-4xl mx-auto text-center">
+        <header className="max-w-4xl mx-auto text-center min-h-[calc(100vh-6rem)] flex flex-col items-center justify-center">
           <img src="/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png" alt="Gen AI Global logo" className="mx-auto h-20 w-20 mb-6" />
-          <h1 className="text-4xl font-bold mb-3">Gen AI Global</h1>
+          <h1 className="text-5xl md:text-6xl font-bold mb-3">Gen AI Global</h1>
           <p className="text-muted-foreground">Content Pending — verified copy will appear here.</p>
         </header>
       </main>
