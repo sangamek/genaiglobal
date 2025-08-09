@@ -10,6 +10,12 @@ import Resources from "./pages/Resources";
 import GetInvolved from "./pages/GetInvolved";
 import Spotlight from "./pages/Spotlight";
 import Login from "./pages/Login";
+import Blog from "./pages/Blog";
+import BlogPostDetail from "./pages/BlogPostDetail";
+import DevelopmentProcess from "./pages/DevelopmentProcess";
+import TechDetails from "./pages/TechDetails";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Placeholder from "./pages/Placeholder"; // Terms of Service placeholder
 
 const App = () => {
   const [queryClient] = useState(() => new QueryClient());
@@ -26,6 +32,12 @@ const App = () => {
           <Route path="/get-involved" element={<GetInvolved />} />
           <Route path="/spotlight" element={<Spotlight />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/blog/:slug" element={<BlogPostDetail />} />
+          <Route path="/development-process" element={<DevelopmentProcess />} />
+          <Route path="/tech-details" element={<TechDetails />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/terms-of-service" element={<Placeholder />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

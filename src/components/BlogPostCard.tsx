@@ -22,7 +22,7 @@ const BlogPostCard = ({
   category
 }: BlogPostCardProps) => {
   return (
-    <Link to={`/blog/${slug}`}>
+    <Link to={slug && slug !== '#' ? `/blog/${slug}` : '/blog'}>
       <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-300 h-full">
         <div className="grid grid-rows-[200px,1fr]">
           <div

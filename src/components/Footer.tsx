@@ -112,8 +112,8 @@ const Footer = () => {
             © {new Date().getFullYear()} Gen AI Global. All rights reserved.
           </p>
           <div className="flex space-x-6 text-gray-400 text-sm">
-            <span>Privacy Policy</span>
-            <span>Terms of Service</span>
+            <Link to="/privacy-policy" className="hover:text-white transition-colors">Privacy Policy</Link>
+            <Link to="/terms-of-service" className="hover:text-white transition-colors">Terms of Service</Link>
           </div>
         </div>
       </div>
