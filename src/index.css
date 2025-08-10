@@ -16,16 +16,21 @@
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 10%;
 
-    --primary: 350 100% 23%; /* #750014 */
+    /* Brand tokens (HSL) */
+    --brand-primary: 350 100% 23%; /* #750014 */
+    --brand-accent: 277 91% 64%; /* #B74EF7 */
+
+    /* Semantic mapping */
+    --primary: var(--brand-primary);
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 208 9% 58%; /* #8b959e */
+    --secondary: 208 9% 58%; /* neutral */
     --secondary-foreground: 0 0% 10%;
 
     --muted: 0 0% 95%;
     --muted-foreground: 0 0% 40%;
 
-    --accent: 277 91% 64%; /* #B74EF7 */
+    --accent: var(--brand-accent);
     --accent-foreground: 0 0% 100%;
 
     --destructive: 0 84.2% 60.2%;

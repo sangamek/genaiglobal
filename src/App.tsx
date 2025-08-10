@@ -1,6 +1,8 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import TransitionRoute from "@/components/motion/TransitionRoute";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
@@ -23,25 +25,34 @@ const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/community" element={<Community />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/resources" element={<Resources />} />
-          <Route path="/get-involved" element={<GetInvolved />} />
-          <Route path="/spotlight" element={<Spotlight />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/blog" element={<Blog />} />
-          <Route path="/blog/:slug" element={<BlogPostDetail />} />
-          <Route path="/development-process" element={<DevelopmentProcess />} />
-          <Route path="/tech-details" element={<TechDetails />} />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-service" element={<Placeholder />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AnimatedRoutes />
       </BrowserRouter>
     </QueryClientProvider>
+  );
+};
+
+const AnimatedRoutes = () => {
+  const location = useLocation();
+  return (
+    <AnimatePresence mode="wait" initial={false}>
+      <Routes location={location} key={location.pathname}>
+        <Route path="/" element={<TransitionRoute><Index /></TransitionRoute>} />
+        <Route path="/about" element={<TransitionRoute><About /></TransitionRoute>} />
+        <Route path="/community" element={<TransitionRoute><Community /></TransitionRoute>} />
+        <Route path="/events" element={<TransitionRoute><Events /></TransitionRoute>} />
+        <Route path="/resources" element={<TransitionRoute><Resources /></TransitionRoute>} />
+        <Route path="/get-involved" element={<TransitionRoute><GetInvolved /></TransitionRoute>} />
+        <Route path="/spotlight" element={<TransitionRoute><Spotlight /></TransitionRoute>} />
+        <Route path="/login" element={<TransitionRoute><Login /></TransitionRoute>} />
+        <Route path="/blog" element={<TransitionRoute><Blog /></TransitionRoute>} />
+        <Route path="/blog/:slug" element={<TransitionRoute><BlogPostDetail /></TransitionRoute>} />
+        <Route path="/development-process" element={<TransitionRoute><DevelopmentProcess /></TransitionRoute>} />
+        <Route path="/tech-details" element={<TransitionRoute><TechDetails /></TransitionRoute>} />
+        <Route path="/privacy-policy" element={<TransitionRoute><PrivacyPolicy /></TransitionRoute>} />
+        <Route path="/terms-of-service" element={<TransitionRoute><Placeholder /></TransitionRoute>} />
+        <Route path="*" element={<TransitionRoute><NotFound /></TransitionRoute>} />
+      </Routes>
+    </AnimatePresence>
   );
 };
 

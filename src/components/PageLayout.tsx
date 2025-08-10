@@ -1,6 +1,7 @@
 
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { motion, useReducedMotion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ContactInfo from '@/components/ContactInfo';
@@ -13,6 +14,7 @@ type PageLayoutProps = {
 
 const PageLayout = ({ children, showContact = true }: PageLayoutProps) => {
   const location = useLocation();
+  const reduceMotion = useReducedMotion();
 
   // Effect to scroll to top when route changes
   useEffect(() => {
@@ -22,9 +24,18 @@ const PageLayout = ({ children, showContact = true }: PageLayoutProps) => {
   return (
     <div className="min-h-screen bg-white w-full max-w-[100vw] overflow-x-hidden">
       <Navbar />
-      <div className="pt-16 md:pt-20">
+      <motion.main
+        key={location.pathname}
+        initial={reduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
+        transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+        className="pt-16 md:pt-20"
+        role="main"
+        aria-live="polite"
+      >
         {children}
-      </div>
+      </motion.main>
       {showContact && <ContactInfo />}
       <Footer />
       {showContact && <FloatingContactButton />}

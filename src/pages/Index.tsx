@@ -17,6 +17,8 @@ const Index = () => {
         <div className="pointer-events-none absolute inset-0 -z-10">
           <div className="absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_10%,hsl(var(--accent)/0.18),transparent_60%)]" />
           <div className="absolute inset-0 opacity-40 [background:radial-gradient(hsl(var(--accent)/0.15)_1px,transparent_1px)] [background-size:24px_24px]" />
+          {/* Hero contrast overlay for light/dark, ensures WCAG AA */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background/0 via-background/40 to-background/80" />
         </div>
         <header className="container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center overflow-visible px-4 pb-6 text-center">
           <h1 className="animate-fade-in bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-balance text-5xl font-bold leading-[1.12] tracking-tight text-transparent sm:text-7xl">
