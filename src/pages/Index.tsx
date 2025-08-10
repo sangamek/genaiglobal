@@ -18,8 +18,8 @@ const Index = () => {
           <div className="absolute inset-0 bg-[radial-gradient(1200px_600px_at_50%_10%,hsl(var(--accent)/0.18),transparent_60%)]" />
           <div className="absolute inset-0 opacity-40 [background:radial-gradient(hsl(var(--accent)/0.15)_1px,transparent_1px)] [background-size:24px_24px]" />
         </div>
-        <header className="container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center px-4 text-center">
-          <h1 className="animate-fade-in bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-5xl font-bold leading-tight text-transparent sm:text-6xl">
+        <header className="container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center overflow-visible px-4 pb-6 text-center">
+          <h1 className="animate-fade-in bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-balance text-5xl font-bold leading-[1.12] tracking-tight text-transparent sm:text-7xl">
             We are democratizing AI knowledge
           </h1>
           <p className="mt-4 max-w-2xl text-balance text-muted-foreground">Open, responsible, and future‑proof. Join a global community building practical AI literacy for everyone.</p>
