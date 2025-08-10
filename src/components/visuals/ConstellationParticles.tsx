@@ -118,7 +118,7 @@ const ConstellationParticles: React.FC<ConstellationParticlesProps> = ({ classNa
     };
   }, [density]);
 
-  return <canvas ref={ref} className={"pointer-events-none absolute inset-0 -z-10 " + (className || "")} />;
+  return <canvas ref={ref} className={"pointer-events-none absolute inset-0 z-0 " + (className || "")} />;
 };
 
 export default ConstellationParticles;

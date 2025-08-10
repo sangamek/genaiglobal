@@ -9,7 +9,7 @@ interface AuroraNebulaProps {
 // Aurora layers + starfield parallax accents (CSS backgrounds), ultra light
 const AuroraNebula = memo(({ className }: AuroraNebulaProps) => {
   return (
-    <div className={cn("pointer-events-none absolute inset-0 -z-10 overflow-hidden", className)}>
+    <div className={cn("pointer-events-none absolute inset-0 z-0 overflow-hidden", className)}>
       {/* Subtle dotted star grid */}
       <motion.div
         className="absolute inset-0 opacity-40"

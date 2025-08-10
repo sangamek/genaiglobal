@@ -17,7 +17,7 @@ const Community = () => {
         <AuroraNebula />
         <ConstellationParticles />
         <motion.section 
-          className="container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center gap-8 px-4 text-center overflow-visible pb-6"
+          className="relative z-10 container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center gap-8 px-4 text-center overflow-visible pb-6"
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
