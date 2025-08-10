@@ -3,7 +3,7 @@ import { lazy, Suspense, useEffect, useState } from 'react';
 import SEO from '@/components/SEO';
 import PageLayout from '@/components/PageLayout';
 // Lazy-load to prevent SSR issues
-const OrgChart3D = lazy(() => import('@/components/OrgChart3D'));
+const NeonOrgGraph = lazy(() => import('@/components/NeonOrgGraph'));
 
 const About = () => {
   const [isClient, setIsClient] = useState(false);
@@ -23,7 +23,7 @@ const About = () => {
           <section aria-label="Organizational chart" className="relative h-[70vh] sm:h-[75vh] lg:h-[80vh] overflow-hidden rounded-lg border bg-card">
             {isClient ? (
               <Suspense fallback={<div className="flex h-full items-center justify-center text-muted-foreground">Loading org chart...</div>}>
-                <OrgChart3D />
+                <NeonOrgGraph />
               </Suspense>
             ) : (
               <div className="flex h-full items-center justify-center text-muted-foreground">Loading org chart...</div>
