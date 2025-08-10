@@ -52,7 +52,7 @@ function flattenGroups(groups: OrgGroup[], depth = 0, parentId?: string) {
   return { nodes, edges };
 }
 
-// Radial multi-ring layout by depth
+// Radial multi-ring layout by depth with anti-overlap radius
 function computeLayout(
   items: Array<{ id: string; depth: number }>,
   width: number,
@@ -67,18 +67,25 @@ function computeLayout(
 
   const cx = width / 2;
   const cy = height / 2;
-  const maxRing = Math.max(...Array.from(byDepth.keys()).concat([0]));
-  const baseRadius = Math.min(width, height) / 6;
-  const ringGap = Math.min(width, height) / 8;
+  const maxRing = byDepth.size ? Math.max(...byDepth.keys()) : 0;
+
+  const minMargin = 24; // spacing between nodes on a ring
+  const baseRadius = Math.min(width, height) / 5;
+  const ringGap = Math.max(nodeHeight + minMargin, Math.min(width, height) / 7);
 
   const pos: Record<string, { x: number; y: number }> = {};
 
   for (let d = 0; d <= maxRing; d++) {
     const ids = byDepth.get(d) ?? [];
-    const radius = baseRadius + d * ringGap;
-    const count = Math.max(ids.length, 1);
+    if (ids.length === 0) continue;
+
+    const count = ids.length;
+    const circumferenceRequirement = count * (nodeWidth + minMargin);
+    const spacingRadius = circumferenceRequirement / (2 * Math.PI);
+    const radius = Math.max(baseRadius + d * ringGap, spacingRadius);
+
     const step = (Math.PI * 2) / count;
-    const startAngle = d % 2 === 0 ? -Math.PI / 2 : -Math.PI / 2 + step / 2; // staggers rings slightly
+    const startAngle = -Math.PI / 2; // top center
 
     ids.forEach((id, i) => {
       const a = startAngle + i * step;
