@@ -43,7 +43,7 @@ const Navbar = () => {
   };
 
   return (
-    <motion.nav className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full bg-[hsl(var(--footer))] shadow-sm")} initial={{
+    <motion.nav className={cn("fixed top-0 left-0 right-0 z-[9999] transition-all duration-300 w-full bg-[hsl(var(--footer))] shadow-lg")} initial={{
       opacity: 1,
       y: 0
     }} animate={{
