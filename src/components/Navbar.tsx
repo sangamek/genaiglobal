@@ -43,7 +43,7 @@ const Navbar = () => {
   };
 
   return (
-    <motion.nav className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full bg-[hsl(var(--background))] md:bg-[hsl(var(--primary))] shadow-sm")} initial={{
+    <motion.nav className={cn("fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full bg-[hsl(var(--footer))] shadow-sm")} initial={{
       opacity: 1,
       y: 0
     }} animate={{
@@ -95,7 +95,7 @@ const Navbar = () => {
           
           {/* Mobile menu button */}
           <div className="md:hidden">
-            <button onClick={toggleMenu} className="inline-flex items-center p-2 focus:outline-none text-[hsl(var(--foreground))] md:text-[hsl(var(--primary-foreground))] focus:ring-2 focus:ring-offset-2 focus:ring-[hsl(var(--primary))]">
+            <button onClick={toggleMenu} className="inline-flex items-center p-2 focus:outline-none text-[hsl(var(--footer-foreground))] focus:ring-2 focus:ring-offset-2 focus:ring-[hsl(var(--primary))]">
               {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
@@ -103,8 +103,8 @@ const Navbar = () => {
       </div>
 
       {/* Mobile Navigation Menu */}
-      <div className={cn("md:hidden transition-all duration-300 overflow-hidden w-full", isMenuOpen ? "max-h-80 opacity-100" : "max-h-0 opacity-0")}> 
-        <div className="px-3 pt-2 pb-3 space-y-1 shadow-sm overflow-y-auto max-h-80 bg-[hsl(var(--background))]"> 
+      <div className={cn("md:hidden transition-all duration-300 overflow-hidden w-full", isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0")}> 
+        <div className="px-3 pt-2 pb-3 space-y-1 shadow-sm overflow-y-auto max-h-screen bg-[hsl(var(--footer))]"> 
           {[
             { to: '/', label: 'Home' },
             { to: '/about', label: 'About Us' },
@@ -121,7 +121,7 @@ const Navbar = () => {
               aria-current={isActive(item.to) ? 'page' : undefined}
               className={cn(
                 "block px-3 py-1.5 rounded-md text-sm",
-                isActive(item.to) ? "text-[hsl(var(--accent))] underline underline-offset-4 font-semibold" : "text-[hsl(var(--foreground))]"
+                isActive(item.to) ? "text-[hsl(var(--accent))] underline underline-offset-4 font-semibold" : "text-[hsl(var(--footer-foreground))]"
               )}
               onClick={() => { setIsMenuOpen(false); window.scrollTo(0,0); }}
             >
