@@ -2,6 +2,8 @@ import PageLayout from '@/components/PageLayout';
 import SEO from '@/components/SEO';
 import { Linkedin, MessageSquare } from 'lucide-react';
 import { motion } from 'framer-motion';
+import AuroraNebula from '@/components/visuals/AuroraNebula';
+import ConstellationParticles from '@/components/visuals/ConstellationParticles';
 
 // Optional: Provide LinkedIn post URNs to embed latest posts. Example: "urn:li:share:123"
 const LINKEDIN_POST_URNS: string[] = [];
@@ -12,10 +14,8 @@ const Community = () => {
       <SEO title="Community — Gen AI Global" description="Follow us and join the conversation: LinkedIn and Discord." />
       <main className="relative pt-16 md:pt-20">
         {/* Futuristic background */}
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <div className="absolute inset-0 bg-[radial-gradient(1000px_500px_at_50%_10%,hsl(var(--accent)/0.16),transparent_60%)]" />
-          <div className="absolute inset-0 opacity-40 [background:radial-gradient(hsl(var(--accent)/0.12)_1px,transparent_1px)] [background-size:22px_22px]" />
-        </div>
+        <AuroraNebula />
+        <ConstellationParticles />
         <motion.section 
           className="container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center gap-8 px-4 text-center overflow-visible pb-6"
           initial={{ opacity: 0, y: 12 }}
@@ -30,7 +30,7 @@ const Community = () => {
               href="https://www.linkedin.com/company/gen-ai-global/"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center overflow-hidden rounded-xl border bg-card px-6 py-5 text-lg shadow-[0_0_28px_hsl(var(--accent)/0.35)] ring-1 ring-accent/40"
+              className="group ripple-pulse relative inline-flex items-center justify-center overflow-hidden rounded-xl border bg-card px-6 py-5 text-lg shadow-[0_0_28px_hsl(var(--accent)/0.35)] ring-1 ring-accent/40"
               aria-label="Follow on LinkedIn"
               initial={{ opacity: 0, y: 14, scale: 0.98 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
@@ -49,7 +49,7 @@ const Community = () => {
               href="https://discord.gg/Qxt2TAS5"
               target="_blank"
               rel="noopener noreferrer"
-              className="group relative inline-flex items-center justify-center overflow-hidden rounded-xl border bg-card px-6 py-5 text-lg shadow-[0_0_28px_hsl(var(--accent)/0.35)] ring-1 ring-accent/40"
+              className="group ripple-pulse relative inline-flex items-center justify-center overflow-hidden rounded-xl border bg-card px-6 py-5 text-lg shadow-[0_0_28px_hsl(var(--accent)/0.35)] ring-1 ring-accent/40"
               aria-label="Join our Discord"
               initial={{ opacity: 0, y: 14, scale: 0.98 }}
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
