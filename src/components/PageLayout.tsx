@@ -22,7 +22,7 @@ const PageLayout = ({ children, showContact = true }: PageLayoutProps) => {
   }, [location]);
 
   return (
-    <div className="min-h-screen bg-white w-full max-w-[100vw] overflow-x-hidden">
+    <div className="min-h-screen flex flex-col bg-background w-full max-w-[100vw] overflow-x-hidden">
       <Navbar />
       <motion.main
         key={location.pathname}
@@ -30,7 +30,7 @@ const PageLayout = ({ children, showContact = true }: PageLayoutProps) => {
         animate={{ opacity: 1, y: 0 }}
         exit={reduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
         transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-        className="pt-16 md:pt-20"
+        className="pt-16 md:pt-20 flex-1"
         role="main"
         aria-live="polite"
       >
