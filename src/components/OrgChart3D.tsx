@@ -182,13 +182,18 @@ const OrgChart3D: React.FC = () => {
       <div className="rounded-lg border bg-card p-2 sm:p-4">
         <TransformWrapper
           initialScale={1}
-          minScale={0.5}
+          minScale={0.85}
           maxScale={2.5}
           wheel={{ step: 0.06 }}
           doubleClick={{ disabled: true }}
           pinch={{ step: 5 }}
+          centerZoomedOut
+          centerOnInit
+          limitToBounds
+          alignmentAnimation={{ sizeX: 150, sizeY: 150, animationTime: 220 }}
+          onInit={(ref) => ref.centerView?.(1)}
         >
-          {({ zoomIn, zoomOut, resetTransform }) => (
+          {({ zoomIn, zoomOut, resetTransform, centerView }) => (
             <>
               <div className="mb-2 flex gap-2">
                 <Button size="sm" variant="secondary" onClick={() => zoomIn()} aria-label="Zoom in">
@@ -197,7 +202,7 @@ const OrgChart3D: React.FC = () => {
                 <Button size="sm" variant="secondary" onClick={() => zoomOut()} aria-label="Zoom out">
                   −
                 </Button>
-                <Button size="sm" variant="secondary" onClick={() => resetTransform()} aria-label="Reset view">
+                <Button size="sm" variant="secondary" onClick={() => centerView?.(1)} aria-label="Reset view">
                   Reset
                 </Button>
               </div>
