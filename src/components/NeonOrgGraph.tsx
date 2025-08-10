@@ -8,6 +8,7 @@ import {
   useNodesState,
   useEdgesState,
   useReactFlow,
+  ReactFlowProvider,
   Node,
   Edge,
 } from "@xyflow/react";
@@ -117,7 +118,7 @@ function GroupNode({ data, selected }: { data: GroupNodeData; selected: boolean 
 
 const nodeTypes = { groupNode: GroupNode } as const;
 
-const NeonOrgGraph: React.FC = () => {
+const GraphContent: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dims, setDims] = useState({ w: 800, h: 600 });
   const [query, setQuery] = useState("");
@@ -259,6 +260,14 @@ const NeonOrgGraph: React.FC = () => {
         </div>
       </div>
     </div>
+  );
+};
+
+const NeonOrgGraph: React.FC = () => {
+  return (
+    <ReactFlowProvider>
+      <GraphContent />
+    </ReactFlowProvider>
   );
 };
 
