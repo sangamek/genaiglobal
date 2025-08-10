@@ -17,13 +17,13 @@ const Community = () => {
           <div className="absolute inset-0 opacity-40 [background:radial-gradient(hsl(var(--accent)/0.12)_1px,transparent_1px)] [background-size:22px_22px]" />
         </div>
         <motion.section 
-          className="container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center gap-8 px-4 text-center"
+          className="container mx-auto flex min-h-[calc(100vh-6rem)] max-w-5xl flex-col items-center justify-center gap-8 px-4 text-center overflow-visible pb-6"
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-100px' }}
           transition={{ duration: 0.6, ease: 'easeOut' }}
         >
-          <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-4xl font-bold text-transparent sm:text-5xl">Get Involved</h1>
+          <h1 className="bg-gradient-to-b from-foreground to-foreground/80 bg-clip-text text-transparent text-balance text-5xl font-bold leading-[1.12] tracking-tight sm:text-6xl">Get Involved</h1>
           <p className="max-w-2xl text-balance text-muted-foreground">Stay in the loop, meet contributors, and help democratize AI knowledge.</p>
           <div className="mt-2 grid w-full gap-4 sm:grid-cols-2">
             <motion.a
