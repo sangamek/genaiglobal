@@ -15,7 +15,8 @@ import {
 import "@xyflow/react/dist/style.css";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Search, Users } from "lucide-react";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
+import { Search, Users, User } from "lucide-react";
 import { orgChart, OrgGroup, CATEGORY_ICON } from "@/data/orgChart";
 
 // Futuristic Neon Org Graph (stable pan/zoom + search-to-focus)
@@ -98,6 +99,16 @@ function computeLayout(
   return pos;
 }
 
+// Helper: find group by id in nested structure
+function findGroupById(groups: OrgGroup[], id: string): OrgGroup | undefined {
+  for (const g of groups) {
+    if (g.id === id) return g;
+    const child = g.children ? findGroupById(g.children, id) : undefined;
+    if (child) return child;
+  }
+  return undefined;
+}
+
 // Group node renderer
 function GroupNode({ data, selected }: { data: GroupNodeData; selected: boolean }) {
   const Icon = CATEGORY_ICON[data.iconKey] ?? Users;
@@ -129,6 +140,8 @@ const GraphContent: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dims, setDims] = useState({ w: 800, h: 600 });
   const [query, setQuery] = useState("");
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const selectedGroup = useMemo(() => (selectedId ? findGroupById(orgChart, selectedId) : undefined), [selectedId]);
   const { nodes: flatNodes, edges: flatEdges } = useMemo(() => flattenGroups(orgChart), []);
 
   // Observe container size
@@ -174,6 +187,7 @@ const GraphContent: React.FC = () => {
   const [nodes, setNodes, onNodesChange] = useNodesState<Node<GroupNodeData>>(initialNodes);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges);
   const rf = useReactFlow();
+  const SelIcon = useMemo(() => (selectedGroup ? (CATEGORY_ICON[selectedGroup.icon] ?? Users) : Users), [selectedGroup]);
 
   // Relayout when dims change
   useEffect(() => {
@@ -245,6 +259,7 @@ const GraphContent: React.FC = () => {
             edges={edges}
             onNodesChange={onNodesChange}
             onEdgesChange={onEdgesChange}
+            onNodeClick={(_, node) => setSelectedId(node.id)}
             fitView
             minZoom={0.7}
             maxZoom={2}
@@ -266,6 +281,40 @@ const GraphContent: React.FC = () => {
           <div className="pointer-events-none absolute inset-0 rounded-md bg-[radial-gradient(circle_at_50%_120%,hsl(var(--accent)/0.12),transparent_60%)]" />
         </div>
       </div>
+      <Sheet open={!!selectedGroup} onOpenChange={(o) => { if (!o) setSelectedId(null); }}>
+        <SheetContent side="right" className="w-[min(420px,90vw)]">
+          <SheetHeader>
+            <SheetTitle className="flex items-center gap-2">
+              <span className="inline-flex h-9 w-9 items-center justify-center rounded-md border bg-background shadow-[0_0_12px_hsl(var(--accent)/0.45)]">
+                <SelIcon className="size-4" />
+              </span>
+              {selectedGroup?.name}
+            </SheetTitle>
+          </SheetHeader>
+          <div className="mt-4 space-y-4">
+            {selectedGroup?.description ? (
+              <p className="text-sm text-muted-foreground">{selectedGroup.description}</p>
+            ) : null}
+            {selectedGroup?.members && selectedGroup.members.length > 0 ? (
+              <ul className="space-y-2">
+                {selectedGroup.members.map((m, i) => (
+                  <li key={i} className="flex items-center gap-3 rounded-md border bg-background/70 p-2">
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-md border">
+                      <User className="size-3.5" />
+                    </span>
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium truncate">{m.name}</div>
+                      {m.role ? <div className="text-xs text-muted-foreground truncate">{m.role}</div> : null}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-sm text-muted-foreground">No members yet.</p>
+            )}
+          </div>
+        </SheetContent>
+      </Sheet>
     </div>
   );
 };
