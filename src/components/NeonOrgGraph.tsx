@@ -295,39 +295,41 @@ const GraphContent = ({}: GraphContentProps) => {
 
       {/* Details Sheet */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <SheetContent className="w-[400px] sm:w-[500px] overflow-y-auto">
+        <SheetContent className="w-[400px] sm:w-[500px] overflow-y-auto bg-background border-l border-border z-50">
           {selectedUnit && IconComponent && (
             <>
-              <SheetHeader className="space-y-3">
+              <SheetHeader className="space-y-3 bg-background pb-4">
                 <div className="flex items-center gap-3">
-                  <IconComponent className="h-6 w-6 text-primary" />
+                  <div className="p-2 rounded-lg bg-primary/10 border border-primary/20">
+                    <IconComponent className="h-6 w-6 text-primary" />
+                  </div>
                   <div>
-                    <SheetTitle className="text-left">{selectedUnit.name}</SheetTitle>
-                    <Badge variant="outline" className="mt-1">
+                    <SheetTitle className="text-left text-foreground">{selectedUnit.name}</SheetTitle>
+                    <Badge variant="outline" className="mt-1 bg-background">
                       {selectedUnit.type}
                     </Badge>
                   </div>
                 </div>
                 {selectedUnit.description && (
-                  <p className="text-sm text-muted-foreground text-left">
+                  <p className="text-sm text-muted-foreground text-left bg-muted/30 p-3 rounded-lg">
                     {selectedUnit.description}
                   </p>
                 )}
               </SheetHeader>
 
               {selectedUnit.members && selectedUnit.members.length > 0 && (
-                <div className="mt-6 space-y-4">
-                  <h4 className="font-medium text-sm">
+                <div className="mt-6 space-y-4 bg-background">
+                  <h4 className="font-medium text-sm text-foreground border-b border-border pb-2">
                     Team Members ({selectedUnit.members.length})
                   </h4>
-                  <div className="space-y-2">
+                  <div className="space-y-2 max-h-[60vh] overflow-y-auto">
                     {selectedUnit.members.map((member, index) => (
-                      <div key={index} className="p-3 rounded-lg border bg-card text-card-foreground">
-                        <div className="font-medium text-sm">
+                      <div key={index} className="p-3 rounded-lg border border-border bg-card text-card-foreground shadow-sm hover:shadow-md transition-shadow">
+                        <div className="font-medium text-sm text-foreground">
                           {member.name.length > 42 ? `${member.name.substring(0, 39)}...` : member.name}
                         </div>
                         {member.role && (
-                          <div className="text-xs text-muted-foreground mt-1">
+                          <div className="text-xs text-muted-foreground mt-1 opacity-80">
                             {member.role}
                           </div>
                         )}
