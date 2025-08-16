@@ -21,7 +21,7 @@ import {
   UserPlus,
   Bot,
 } from "lucide-react";
-import { orgChart, OrgGroup, OrgMember, CATEGORY_ICON } from "@/data/orgChart";
+import { ORG_UNITS, OrgUnit, OrgMember, CATEGORY_ICON } from "@/data/orgChart";
 
 const highlight = (text: string, query: string) => {
   if (!query) return text;
@@ -59,7 +59,7 @@ const MemberCard: React.FC<MemberCardProps> = ({ member, query }) => {
   );
 };
 
-const GroupHeader: React.FC<{ group: OrgGroup; count: number }> = ({ group, count }) => {
+const GroupHeader: React.FC<{ group: OrgUnit; count: number }> = ({ group, count }) => {
   const Icon = CATEGORY_ICON[group.icon] ?? Users;
   return (
     <div
@@ -80,14 +80,21 @@ const GroupHeader: React.FC<{ group: OrgGroup; count: number }> = ({ group, coun
 };
 
 const Group: React.FC<{
-  group: OrgGroup;
+  group: OrgUnit;
+  children: OrgUnit[];
   query: string;
   defaultOpen?: boolean;
-}> = ({ group, query, defaultOpen }) => {
+}> = ({ group, children, query, defaultOpen }) => {
   const members = (group.members ?? []).filter((m) =>
     [m.name, m.role ?? ""].some((f) => f.toLowerCase().includes(query.toLowerCase()))
   );
-  const hasMatches = members.length > 0 || (group.children?.some((g) => (g.members ?? []).some((m) => [m.name, m.role ?? ""].join(" ").toLowerCase().includes(query.toLowerCase()))) ?? false);
+  
+  // Check for matches in this group or its children
+  const hasMatches = members.length > 0 || children.some((child) => 
+    (child.members ?? []).some((m) => 
+      [m.name, m.role ?? ""].join(" ").toLowerCase().includes(query.toLowerCase())
+    )
+  );
 
   // Auto-open when searching and matches exist
   const open = query ? hasMatches : defaultOpen;
@@ -110,11 +117,14 @@ const Group: React.FC<{
             ))}
           </div>
         )}
-        {group.children && group.children.length > 0 && (
+        {children.length > 0 && (
           <div className="mt-6 space-y-4">
-            {group.children.map((child) => (
-              <Group key={child.id} group={child} query={query} />
-            ))}
+            {children.map((child) => {
+              const grandChildren = ORG_UNITS.filter(unit => unit.parentId === child.id);
+              return (
+                <Group key={child.id} group={child} children={grandChildren} query={query} />
+              );
+            })}
           </div>
         )}
       </CollapsibleContent>
@@ -126,7 +136,16 @@ const OrgChart3D: React.FC = () => {
   const [query, setQuery] = useState("");
   const containerRef = useRef<HTMLDivElement | null>(null);
 
-  const flatCount = useMemo(() => orgChart.reduce((acc, g) => acc + (g.members?.length ?? 0), 0), []);
+  const flatCount = useMemo(() => ORG_UNITS.reduce((acc, g) => acc + (g.members?.length ?? 0), 0), []);
+
+  // Build hierarchy from flat structure
+  const hierarchicalData = useMemo(() => {
+    const topLevel = ORG_UNITS.filter(unit => !unit.parentId);
+    return topLevel.map(unit => ({
+      unit,
+      children: ORG_UNITS.filter(child => child.parentId === unit.id)
+    }));
+  }, []);
 
   const handleExportPng = async () => {
     if (!containerRef.current) return;
@@ -146,7 +165,7 @@ const OrgChart3D: React.FC = () => {
     pdf.save("genai-org-chart.pdf");
   };
 
-  const dataPending = useMemo(() => orgChart.every((g) => (g.members?.length ?? 0) === 0 && (!g.children || g.children.every((c) => (c.members?.length ?? 0) === 0))), []);
+  const dataPending = useMemo(() => ORG_UNITS.every((g) => (g.members?.length ?? 0) === 0), []);
 
   return (
     <div className="space-y-6">
@@ -210,9 +229,9 @@ const OrgChart3D: React.FC = () => {
                 <TransformComponent>
                   <div ref={containerRef} className="org-surface min-h-[70vh] w-full p-6">
                     <div className="mx-auto grid max-w-[1600px] grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
-                      {orgChart.map((group) => (
-                        <div key={group.id} className="neon-surface rounded-lg border bg-background/60 p-4 backdrop-blur">
-                          <Group group={group} query={query} defaultOpen />
+                      {hierarchicalData.map(({ unit, children }) => (
+                        <div key={unit.id} className="neon-surface rounded-lg border bg-background/60 p-4 backdrop-blur">
+                          <Group group={unit} children={children} query={query} defaultOpen />
                         </div>
                       ))}
                     </div>
