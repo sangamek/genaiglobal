@@ -66,11 +66,6 @@ const Navbar = () => {
                   { to: '/', label: 'Home' },
                   { to: '/about', label: 'About Us' },
                   { to: '/community', label: 'Community' },
-                  { to: '/events', label: 'Events' },
-                  { to: '/resources', label: 'Resources' },
-                  { to: '/get-involved', label: 'Get Involved' },
-                  { to: '/spotlight', label: 'Spotlight' },
-                  { to: '/login', label: 'Log In' },
                 ].map((item) => (
                   <NavigationMenuItem key={item.to}>
                     <NavigationMenuLink
@@ -109,11 +104,6 @@ const Navbar = () => {
             { to: '/', label: 'Home' },
             { to: '/about', label: 'About Us' },
             { to: '/community', label: 'Community' },
-            { to: '/events', label: 'Events' },
-            { to: '/resources', label: 'Resources' },
-            { to: '/get-involved', label: 'Get Involved' },
-            { to: '/spotlight', label: 'Spotlight' },
-            { to: '/login', label: 'Log In' },
           ].map((item) => (
             <Link
               key={item.to}
