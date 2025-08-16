@@ -1,32 +1,69 @@
-# Gen AI Global Website
+# Welcome to your Lovable project
 
-This repository contains a mobile-first, investor-grade landing site. The interface is built with [Tailwind CSS](https://tailwindcss.com/) and all page content is sourced from a JSON configuration so that the site is CMS-ready.
+## Project info
 
-## Architecture
-- **`index.html`** loads `head-section.html` and `top-panel.html` using `w3.js` for simple templating.
-- **`site-data.json`** holds all navigation links, text, and media URLs.
-- **`main.js`** fetches the JSON and populates the DOM, adding graceful fallbacks when fields are missing.
-- Tailwind is configured for the Gen AI Global palette (maroon `#750014`, gray `#8B959E`, purple `#B74EF7`) and dark‑mode support.
+**URL**: https://lovable.dev/projects/ec1d4f1e-2506-4da5-a91b-34afa90cceb6
 
-## Running Locally
-No build step is required. Launch a static server and open `index.html`:
+## How can I edit this code?
 
-```bash
-npx serve .
+There are several ways of editing your application.
+
+**Use Lovable**
+
+Simply visit the [Lovable Project](https://lovable.dev/projects/ec1d4f1e-2506-4da5-a91b-34afa90cceb6) and start prompting.
+
+Changes made via Lovable will be committed automatically to this repo.
+
+**Use your preferred IDE**
+
+If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+
+The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+
+Follow these steps:
+
+```sh
+# Step 1: Clone the repository using the project's Git URL.
+git clone <YOUR_GIT_URL>
+
+# Step 2: Navigate to the project directory.
+cd <YOUR_PROJECT_NAME>
+
+# Step 3: Install the necessary dependencies.
+npm i
+
+# Step 4: Start the development server with auto-reloading and an instant preview.
+npm run dev
 ```
 
-or simply open the file in a modern browser.
+**Edit a file directly in GitHub**
 
-## Performance Testing
-Lighthouse can be used to benchmark performance:
+- Navigate to the desired file(s).
+- Click the "Edit" button (pencil icon) at the top right of the file view.
+- Make your changes and commit the changes.
 
-```bash
-npx lighthouse http://localhost:3000/index.html --view
-```
+**Use GitHub Codespaces**
 
-> The container environment blocked `npm install -g lighthouse`, so metrics could not be recorded here.
+- Navigate to the main page of your repository.
+- Click on the "Code" button (green button) near the top right.
+- Select the "Codespaces" tab.
+- Click on "New codespace" to launch a new Codespace environment.
+- Edit files directly within the Codespace and commit and push your changes once you're done.
 
-## Before/After Summary
-- Replaced custom CSS with tree-shakable Tailwind via CDN.
-- Navigation, hero text, mission, features, video and footer now load from `site-data.json` with fallbacks.
-- Added dark‑mode toggle, lazy-loaded assets and micro-animations on feature cards.
+## What technologies are used for this project?
+
+This project is built with .
+
+- Vite
+- TypeScript
+- React
+- shadcn-ui
+- Tailwind CSS
+
+## How can I deploy this project?
+
+Simply open [Lovable](https://lovable.dev/projects/ec1d4f1e-2506-4da5-a91b-34afa90cceb6) and click on Share -> Publish.
+
+## I want to use a custom domain - is that possible?
+
+We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
