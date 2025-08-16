@@ -1,325 +1,350 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import {
   ReactFlow,
-  Background,
-  BackgroundVariant,
-  Controls,
+  ReactFlowProvider,
   MiniMap,
+  Controls,
+  Background,
   useNodesState,
   useEdgesState,
-  useReactFlow,
-  ReactFlowProvider,
   Node,
   Edge,
-} from "@xyflow/react";
-import "@xyflow/react/dist/style.css";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
-import { Search, Users, User } from "lucide-react";
-import { orgChart, OrgGroup, CATEGORY_ICON } from "@/data/orgChart";
+  useReactFlow,
+} from '@xyflow/react';
+import { Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
+import { Badge } from '@/components/ui/badge';
+import { CATEGORY_ICON, ORG_UNITS, OrgUnit } from '@/data/orgChart';
+import { getLayoutedElements } from '@/lib/layoutDagre';
+import GroupNode from '@/components/nodes/GroupNode';
+import OrgTabs from '@/components/OrgTabs';
 
-// Futuristic Neon Org Graph (stable pan/zoom + search-to-focus)
-// - No node hover transitions (per project guidelines)
-// - Uses semantic tokens (accent/background) for neon look
-// - Mobile friendly (auto-fit, responsive re-layout)
+import '@xyflow/react/dist/style.css';
 
-type GroupNodeData = {
-  id: string;
-  name: string;
-  iconKey: keyof typeof CATEGORY_ICON;
-  count: number;
-  depth: number;
+const nodeTypes = {
+  group: GroupNode,
 };
 
-const nodeWidth = 220;
-const nodeHeight = 88;
+interface GraphContentProps {}
 
-// Build a depth map for groups
-function flattenGroups(groups: OrgGroup[], depth = 0, parentId?: string) {
-  const nodes: Array<{ id: string; name: string; iconKey: keyof typeof CATEGORY_ICON; count: number; depth: number }>= [];
-  const edges: Array<{ source: string; target: string }> = [];
+const GraphContent = ({}: GraphContentProps) => {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedNode, setSelectedNode] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('all');
+  const [expandedPillars, setExpandedPillars] = useState<Set<string>>(new Set());
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  
+  const { fitView, setCenter } = useReactFlow();
 
-  for (const g of groups) {
-    nodes.push({ id: g.id, name: g.name, iconKey: g.icon, count: g.members?.length ?? 0, depth });
-    if (parentId) edges.push({ source: parentId, target: g.id });
-    if (g.children && g.children.length) {
-      const child = flattenGroups(g.children, depth + 1, g.id);
-      nodes.push(...child.nodes);
-      edges.push(...child.edges);
-    }
-  }
-
-  return { nodes, edges };
-}
-
-// Radial multi-ring layout by depth with anti-overlap radius
-function computeLayout(
-  items: Array<{ id: string; depth: number }>,
-  width: number,
-  height: number
-): Record<string, { x: number; y: number }> {
-  const byDepth = new Map<number, string[]>();
-  for (const it of items) {
-    const arr = byDepth.get(it.depth) ?? [];
-    arr.push(it.id);
-    byDepth.set(it.depth, arr);
-  }
-
-  const cx = width / 2;
-  const cy = height / 2;
-  const maxRing = byDepth.size ? Math.max(...byDepth.keys()) : 0;
-
-  const minMargin = 24; // spacing between nodes on a ring
-  const baseRadius = Math.min(width, height) / 5;
-  const ringGap = Math.max(nodeHeight + minMargin, Math.min(width, height) / 7);
-
-  const pos: Record<string, { x: number; y: number }> = {};
-
-  for (let d = 0; d <= maxRing; d++) {
-    const ids = byDepth.get(d) ?? [];
-    if (ids.length === 0) continue;
-
-    const count = ids.length;
-    const circumferenceRequirement = count * (nodeWidth + minMargin);
-    const spacingRadius = circumferenceRequirement / (2 * Math.PI);
-    const radius = Math.max(baseRadius + d * ringGap, spacingRadius);
-
-    const step = (Math.PI * 2) / count;
-    const startAngle = -Math.PI / 2; // top center
-
-    ids.forEach((id, i) => {
-      const a = startAngle + i * step;
-      const x = cx + Math.cos(a) * radius - nodeWidth / 2;
-      const y = cy + Math.sin(a) * radius - nodeHeight / 2;
-      pos[id] = { x, y };
-    });
-  }
-
-  return pos;
-}
-
-// Helper: find group by id in nested structure
-function findGroupById(groups: OrgGroup[], id: string): OrgGroup | undefined {
-  for (const g of groups) {
-    if (g.id === id) return g;
-    const child = g.children ? findGroupById(g.children, id) : undefined;
-    if (child) return child;
-  }
-  return undefined;
-}
-
-// Group node renderer
-function GroupNode({ data, selected }: { data: GroupNodeData; selected: boolean }) {
-  const Icon = CATEGORY_ICON[data.iconKey] ?? Users;
-  return (
-    <div
-      className={
-        "rounded-xl border bg-background/70 backdrop-blur px-4 py-3 shadow-[0_0_28px_hsl(var(--accent)/0.35)] " +
-        (selected ? " ring-2 ring-accent" : " ring-1 ring-accent/30")
-      }
-      style={{ width: nodeWidth, height: nodeHeight }}
-      aria-label={`${data.name} group, ${data.count} members`}
-    >
-      <div className="flex items-center gap-3">
-        <span className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-background shadow-[0_0_12px_hsl(var(--accent)/0.45)]">
-          <Icon className="size-4" />
-        </span>
-        <div className="min-w-0">
-          <div className="text-sm font-semibold truncate">{data.name}</div>
-          <div className="text-xs text-muted-foreground">{data.count} {data.count === 1 ? "member" : "members"}</div>
-        </div>
-      </div>
-    </div>
+  // Get pillars for tabs
+  const pillars = useMemo(() => 
+    ORG_UNITS.filter(unit => unit.type === 'pillar'),
+    []
   );
-}
 
-const nodeTypes = { groupNode: GroupNode } as const;
+  // Filter units based on active tab and expansion state
+  const visibleUnits = useMemo(() => {
+    let filtered = ORG_UNITS;
+    
+    // Filter by pillar if not "all"
+    if (activeTab !== 'all') {
+      filtered = filtered.filter(unit => {
+        if (unit.type === 'director') return false;
+        if (unit.type === 'pillar') return unit.id === activeTab;
+        if (unit.type === 'team') return unit.parentId === activeTab;
+        return false;
+      });
+    }
+    
+    // Filter teams based on expansion state
+    if (activeTab === 'all') {
+      filtered = filtered.filter(unit => {
+        if (unit.type === 'team') {
+          return expandedPillars.has(unit.parentId || '');
+        }
+        return true;
+      });
+    }
+    
+    return filtered;
+  }, [activeTab, expandedPillars]);
 
-const GraphContent: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const [dims, setDims] = useState({ w: 800, h: 600 });
-  const [query, setQuery] = useState("");
-  const [selectedId, setSelectedId] = useState<string | null>(null);
-  const selectedGroup = useMemo(() => (selectedId ? findGroupById(orgChart, selectedId) : undefined), [selectedId]);
-  const { nodes: flatNodes, edges: flatEdges } = useMemo(() => flattenGroups(orgChart), []);
+  // Create nodes and edges
+  const { initialNodes, initialEdges } = useMemo(() => {
+    const nodes: Node[] = visibleUnits.map(unit => {
+      const memberCount = unit.members?.length || 0;
+      const teamCount = unit.type === 'pillar' 
+        ? ORG_UNITS.filter(u => u.type === 'team' && u.parentId === unit.id).length 
+        : 0;
 
-  // Observe container size
-  useEffect(() => {
-    if (!containerRef.current) return;
-    const ro = new ResizeObserver((entries) => {
-      for (const entry of entries) {
-        const cr = entry.contentRect;
-        setDims({ w: cr.width, h: cr.height });
+      return {
+        id: unit.id,
+        type: 'group',
+        position: { x: 0, y: 0 },
+        data: {
+          ...unit,
+          memberCount,
+          teamCount,
+          isExpanded: expandedPillars.has(unit.id),
+          onToggle: handleToggleExpansion,
+        },
+        measured: { width: 220, height: 80 },
+      };
+    });
+
+    const edges: Edge[] = [];
+    visibleUnits.forEach(unit => {
+      if (unit.parentId) {
+        const parentExists = visibleUnits.some(u => u.id === unit.parentId);
+        if (parentExists) {
+          edges.push({
+            id: `${unit.parentId}-${unit.id}`,
+            source: unit.parentId,
+            target: unit.id,
+            type: 'default',
+            style: {
+              stroke: 'hsl(var(--muted-foreground))',
+              strokeWidth: 1,
+            },
+          });
+        }
       }
     });
-    ro.observe(containerRef.current);
-    return () => ro.disconnect();
+
+    return { initialNodes: nodes, initialEdges: edges };
+  }, [visibleUnits, expandedPillars]);
+
+  // Apply layout
+  const { nodes: layoutedNodes, edges: layoutedEdges } = useMemo(() => {
+    return getLayoutedElements(initialNodes, initialEdges, {
+      rankdir: 'TB',
+      nodesep: 50,
+      ranksep: 90,
+    });
+  }, [initialNodes, initialEdges]);
+
+  const [nodes, setNodes, onNodesChange] = useNodesState(layoutedNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(layoutedEdges);
+
+  // Update nodes when layout changes
+  useEffect(() => {
+    setNodes(layoutedNodes);
+    setEdges(layoutedEdges);
+  }, [layoutedNodes, layoutedEdges, setNodes, setEdges]);
+
+  // Handle pillar expansion/collapse
+  function handleToggleExpansion(pillarId: string) {
+    setExpandedPillars(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(pillarId)) {
+        newSet.delete(pillarId);
+      } else {
+        // Close other pillars if in "all" view
+        if (activeTab === 'all') {
+          newSet.clear();
+        }
+        newSet.add(pillarId);
+      }
+      return newSet;
+    });
+  }
+
+  // Handle node click
+  const onNodeClick = useCallback((_: any, node: Node) => {
+    setSelectedNode(node.id);
+    setIsSheetOpen(true);
   }, []);
 
-  const layoutPositions = useMemo(() => computeLayout(flatNodes.map(n => ({ id: n.id, depth: n.depth })), Math.max(dims.w, 300), Math.max(dims.h, 300)), [flatNodes, dims]);
-
-  const initialNodes: Node<GroupNodeData>[] = useMemo(() => {
-    return flatNodes.map((n) => ({
-      id: n.id,
-      type: "groupNode",
-      data: { id: n.id, name: n.name, iconKey: n.iconKey, count: n.count, depth: n.depth },
-      position: layoutPositions[n.id] ?? { x: 0, y: 0 },
-      draggable: false,
-      selectable: true,
-    }));
-  }, [flatNodes, layoutPositions]);
-
-  const initialEdges: Edge[] = useMemo(() => {
-    return flatEdges.map((e, i) => ({
-      id: `e-${i}-${e.source}-${e.target}`,
-      source: e.source,
-      target: e.target,
-      animated: true,
-      style: {
-        stroke: "hsl(var(--accent))",
-        strokeWidth: 1.6,
-        filter: "drop-shadow(0 0 6px hsl(var(--accent) / 0.55))",
-      },
-    }));
-  }, [flatEdges]);
-
-  const [nodes, setNodes, onNodesChange] = useNodesState<Node<GroupNodeData>>(initialNodes);
-  const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>(initialEdges);
-  const rf = useReactFlow();
-  const SelIcon = useMemo(() => (selectedGroup ? (CATEGORY_ICON[selectedGroup.icon] ?? Users) : Users), [selectedGroup]);
-
-  // Relayout when dims change
-  useEffect(() => {
-    setNodes((nds) => nds.map((n) => ({ ...n, position: layoutPositions[n.id] ?? n.position })));
-  }, [layoutPositions, setNodes]);
-
-  // Fit view on mount and when layout stabilizes
-  useEffect(() => {
-    const id = setTimeout(() => {
-      try { rf.fitView({ padding: 0.15, duration: 400 }); } catch {}
-    }, 50);
-    return () => clearTimeout(id);
-  }, [rf, dims.w, dims.h]);
-
-  const handleFocusSearch = useCallback(() => {
-    const q = query.trim().toLowerCase();
-    if (!q) {
-      rf.fitView({ padding: 0.15, duration: 300 });
-      return;
+  // Handle search
+  const handleSearch = useCallback((query: string) => {
+    setSearchQuery(query);
+    
+    if (!query.trim()) return;
+    
+    const lowerQuery = query.toLowerCase();
+    
+    // Search in all units and members
+    let foundUnit: OrgUnit | null = null;
+    let foundMember: { unit: OrgUnit; member: { name: string; role?: string } } | null = null;
+    
+    // Search units first
+    foundUnit = ORG_UNITS.find(unit => 
+      unit.name.toLowerCase().includes(lowerQuery)
+    ) || null;
+    
+    // Search members if no unit found
+    if (!foundUnit) {
+      for (const unit of ORG_UNITS) {
+        if (unit.members) {
+          const member = unit.members.find(m => 
+            m.name.toLowerCase().includes(lowerQuery) ||
+            (m.role && m.role.toLowerCase().includes(lowerQuery))
+          );
+          if (member) {
+            foundMember = { unit, member };
+            break;
+          }
+        }
+      }
     }
+    
+    if (foundUnit) {
+      // Focus on the found unit
+      const node = nodes.find(n => n.id === foundUnit!.id);
+      if (node) {
+        setCenter(node.position.x + 110, node.position.y + 40, { zoom: 1, duration: 800 });
+        setSelectedNode(foundUnit.id);
+        setIsSheetOpen(true);
+      }
+    } else if (foundMember) {
+      // If member found, expand parent team's pillar and focus
+      const teamUnit = foundMember.unit;
+      
+      if (teamUnit.type === 'team' && teamUnit.parentId) {
+        // Switch to pillar tab or "all"
+        if (activeTab !== 'all' && activeTab !== teamUnit.parentId) {
+          setActiveTab(teamUnit.parentId);
+        }
+        
+        // Expand the pillar
+        setExpandedPillars(prev => new Set([...prev, teamUnit.parentId!]));
+        
+        // Focus on team after a brief delay to allow for layout update
+        setTimeout(() => {
+          const node = nodes.find(n => n.id === teamUnit.id);
+          if (node) {
+            setCenter(node.position.x + 110, node.position.y + 40, { zoom: 1, duration: 800 });
+            setSelectedNode(teamUnit.id);
+            setIsSheetOpen(true);
+          }
+        }, 200);
+      }
+    }
+  }, [nodes, setCenter, activeTab]);
 
-    // Match group by name or any member/role inside that group
-    const match = orgChart
-      .flatMap((g) => [g, ...(g.children ?? [])])
-      .find((g) => {
-        const inName = g.name.toLowerCase().includes(q);
-        const inMembers = (g.members ?? []).some((m) =>
-          [m.name, m.role ?? ""].join(" ").toLowerCase().includes(q)
-        );
-        return inName || inMembers;
-      });
+  // Get selected unit for sheet
+  const selectedUnit = selectedNode ? ORG_UNITS.find(u => u.id === selectedNode) : null;
+  const IconComponent = selectedUnit ? CATEGORY_ICON[selectedUnit.icon] : null;
 
-    const id = match?.id;
-    if (!id) return;
-    const n = nodes.find((x) => x.id === id);
-    if (!n) return;
-    // Center on node
-    const x = n.position.x + nodeWidth / 2;
-    const y = n.position.y + nodeHeight / 2;
-    rf.setCenter(x, y, { zoom: 1.1, duration: 400 });
-  }, [query, nodes, rf]);
+  // Fit view when tab changes
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fitView({ duration: 600, padding: 0.1 });
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [activeTab, expandedPillars, fitView]);
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex w-full max-w-md items-center gap-2">
-          <div className="relative w-full">
-            <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
+    <div className="w-full h-full flex flex-col bg-background">
+      {/* Header with tabs and search */}
+      <div className="flex-shrink-0 p-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+        <div className="space-y-3">
+          <OrgTabs
+            pillars={pillars}
+            activeTab={activeTab}
+            onTabChange={setActiveTab}
+          />
+          
+          <div className="relative max-w-md">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search group or member"
-              className="pl-10"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleFocusSearch()}
-              aria-label="Search org"
+              placeholder="Search teams, groups, or members..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleSearch(searchQuery);
+                }
+              }}
+              className="pl-10 h-9"
             />
           </div>
-          <Button variant="secondary" onClick={handleFocusSearch} aria-label="Focus search result">Go</Button>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline" onClick={() => rf.fitView({ padding: 0.15, duration: 300 })} aria-label="Reset view">Reset</Button>
         </div>
       </div>
 
-      <div className="rounded-lg border bg-card p-1 sm:p-2">
-        <div ref={containerRef} className="relative h-[70vh] sm:h-[75vh] lg:h-[80vh] w-full overflow-hidden rounded-md">
-          <ReactFlow
-            nodes={nodes}
-            edges={edges}
-            onNodesChange={onNodesChange}
-            onEdgesChange={onEdgesChange}
-            onNodeClick={(_, node) => setSelectedId(node.id)}
-            fitView
-            minZoom={0.7}
-            maxZoom={2}
-            nodesDraggable={false}
-            nodesConnectable={false}
-            elementsSelectable={true}
-            panOnScroll={true}
-            zoomOnPinch={true}
-            zoomOnScroll={true}
-            nodeTypes={nodeTypes}
-            className="neon-flow"
-            proOptions={{ hideAttribution: true }}
-          >
-            <MiniMap zoomable pannable className="rounded-md" />
-            <Background variant={BackgroundVariant.Dots} gap={24} size={1} />
-            <Controls showInteractive={false} position="top-right" />
-          </ReactFlow>
-          {/* Neon lattice overlay */}
-          <div className="pointer-events-none absolute inset-0 rounded-md bg-[radial-gradient(circle_at_50%_120%,hsl(var(--accent)/0.12),transparent_60%)]" />
-        </div>
+      {/* React Flow */}
+      <div className="flex-1">
+        <ReactFlow
+          nodes={nodes}
+          edges={edges}
+          onNodesChange={onNodesChange}
+          onEdgesChange={onEdgesChange}
+          onNodeClick={onNodeClick}
+          nodeTypes={nodeTypes}
+          fitView
+          minZoom={0.1}
+          maxZoom={2}
+          defaultViewport={{ x: 0, y: 0, zoom: 0.8 }}
+          className="bg-background"
+          proOptions={{ hideAttribution: true }}
+          onInit={() => fitView({ duration: 800, padding: 0.1 })}
+        >
+          <Background color="hsl(var(--muted-foreground))" size={1} />
+          <Controls className="bg-background border border-border" />
+          <MiniMap
+            className="bg-background border border-border"
+            maskColor="hsl(var(--muted) / 0.8)"
+            nodeColor="hsl(var(--primary))"
+            nodeStrokeWidth={2}
+            pannable
+            zoomable
+          />
+        </ReactFlow>
       </div>
-      <Sheet open={!!selectedGroup} onOpenChange={(o) => { if (!o) setSelectedId(null); }}>
-        <SheetContent side="right" className="w-[min(420px,90vw)]">
-          <SheetHeader>
-            <SheetTitle className="flex items-center gap-2">
-              <span className="inline-flex h-9 w-9 items-center justify-center rounded-md border bg-background shadow-[0_0_12px_hsl(var(--accent)/0.45)]">
-                <SelIcon className="size-4" />
-              </span>
-              {selectedGroup?.name}
-            </SheetTitle>
-          </SheetHeader>
-          <div className="mt-4 space-y-4">
-            {selectedGroup?.description ? (
-              <p className="text-sm text-muted-foreground">{selectedGroup.description}</p>
-            ) : null}
-            {selectedGroup?.members && selectedGroup.members.length > 0 ? (
-              <ul className="space-y-2">
-                {selectedGroup.members.map((m, i) => (
-                  <li key={i} className="flex items-center gap-3 rounded-md border bg-background/70 p-2">
-                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-md border">
-                      <User className="size-3.5" />
-                    </span>
-                    <div className="min-w-0">
-                      <div className="text-sm font-medium truncate">{m.name}</div>
-                      {m.role ? <div className="text-xs text-muted-foreground truncate">{m.role}</div> : null}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="text-sm text-muted-foreground">No members yet.</p>
-            )}
-          </div>
+
+      {/* Details Sheet */}
+      <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+        <SheetContent className="w-[400px] sm:w-[500px] overflow-y-auto">
+          {selectedUnit && IconComponent && (
+            <>
+              <SheetHeader className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <IconComponent className="h-6 w-6 text-primary" />
+                  <div>
+                    <SheetTitle className="text-left">{selectedUnit.name}</SheetTitle>
+                    <Badge variant="outline" className="mt-1">
+                      {selectedUnit.type}
+                    </Badge>
+                  </div>
+                </div>
+                {selectedUnit.description && (
+                  <p className="text-sm text-muted-foreground text-left">
+                    {selectedUnit.description}
+                  </p>
+                )}
+              </SheetHeader>
+
+              {selectedUnit.members && selectedUnit.members.length > 0 && (
+                <div className="mt-6 space-y-4">
+                  <h4 className="font-medium text-sm">
+                    Team Members ({selectedUnit.members.length})
+                  </h4>
+                  <div className="space-y-2">
+                    {selectedUnit.members.map((member, index) => (
+                      <div key={index} className="p-3 rounded-lg border bg-card text-card-foreground">
+                        <div className="font-medium text-sm">
+                          {member.name.length > 42 ? `${member.name.substring(0, 39)}...` : member.name}
+                        </div>
+                        {member.role && (
+                          <div className="text-xs text-muted-foreground mt-1">
+                            {member.role}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </>
+          )}
         </SheetContent>
       </Sheet>
     </div>
   );
 };
 
-const NeonOrgGraph: React.FC = () => {
+const NeonOrgGraph = () => {
   return (
     <ReactFlowProvider>
       <GraphContent />
