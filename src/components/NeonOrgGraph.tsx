@@ -295,7 +295,7 @@ const GraphContent = ({}: GraphContentProps) => {
 
       {/* Details Sheet */}
       <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
-        <SheetContent className="w-[400px] sm:w-[500px] overflow-y-auto bg-background border-l border-border z-[100]">
+        <SheetContent className="w-[400px] sm:w-[500px] overflow-y-auto bg-background border-l border-border z-[10000]">
           {selectedUnit && IconComponent && (
             <>
               <SheetHeader className="space-y-3 bg-background pb-4">
