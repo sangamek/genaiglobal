@@ -26,7 +26,7 @@ export type OrgMember = {
 export type OrgUnit = {
   id: string;
   name: string;
-  type: 'director' | 'pillar' | 'team';
+  type: 'founder' | 'director' | 'pillar' | 'team';
   icon: keyof typeof CATEGORY_ICON;
   description?: string;
   parentId?: string;
@@ -55,6 +55,18 @@ export const CATEGORY_ICON = {
 };
 
 export const ORG_UNITS: OrgUnit[] = [
+  // Founder Level
+  {
+    id: "founder-overview",
+    name: "Founder Overview",
+    type: "founder",
+    icon: "Crown",
+    description: "Founding Members",
+    members: [
+      { name: "Oscar Sanchez", role: "Founder" },
+      { name: "Dr. Abel Sanchez", role: "Founder" },
+    ],
+  },
   // Directors Level
   {
     id: "governance-overview",

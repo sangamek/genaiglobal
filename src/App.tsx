@@ -7,11 +7,15 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import About from "./pages/About";
 import Community from "./pages/Community";
+import Resources from "./pages/Resources";
 import Blog from "./pages/Blog";
 import BlogPostDetail from "./pages/BlogPostDetail";
 import DevelopmentProcess from "./pages/DevelopmentProcess";
 import TechDetails from "./pages/TechDetails";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Spotlight from "./pages/Spotlight";
+
+import GetInvolved from "./pages/GetInvolved";
 import Placeholder from "./pages/Placeholder"; // Terms of Service placeholder
 
 const App = () => {
@@ -34,6 +38,10 @@ const AnimatedRoutes = () => {
         <Route path="/" element={<TransitionRoute><Index /></TransitionRoute>} />
         <Route path="/about" element={<TransitionRoute><About /></TransitionRoute>} />
         <Route path="/community" element={<TransitionRoute><Community /></TransitionRoute>} />
+        <Route path="/resources" element={<TransitionRoute><Resources /></TransitionRoute>} />
+        <Route path="/spotlight" element={<TransitionRoute><Spotlight /></TransitionRoute>} />
+        
+        <Route path="/get-involved" element={<TransitionRoute><GetInvolved /></TransitionRoute>} />
         <Route path="/blog" element={<TransitionRoute><Blog /></TransitionRoute>} />
         <Route path="/blog/:slug" element={<TransitionRoute><BlogPostDetail /></TransitionRoute>} />
         <Route path="/development-process" element={<TransitionRoute><DevelopmentProcess /></TransitionRoute>} />

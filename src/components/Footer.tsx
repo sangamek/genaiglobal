@@ -71,7 +71,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-10 pb-10 border-b border-gray-700">
           <div className="lg:col-span-2">
             <img 
-              src="/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png" 
+              src="/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png" 
               alt="Gen AI Global Logo" 
               className="h-10 w-auto mb-6" 
             />
@@ -96,8 +96,6 @@ const Footer = () => {
               <li><Link to="/about" className="text-gray-300 hover:text-white transition-colors">About Us</Link></li>
               <li><Link to="/community" className="text-gray-300 hover:text-white transition-colors">Community</Link></li>
               <li><Link to="/resources" className="text-gray-300 hover:text-white transition-colors">Resources</Link></li>
-              <li><Link to="/get-involved" className="text-gray-300 hover:text-white transition-colors">Get Involved</Link></li>
-              <li><Link to="/spotlight" className="text-gray-300 hover:text-white transition-colors">Spotlight</Link></li>
             </ul>
           </div>
           

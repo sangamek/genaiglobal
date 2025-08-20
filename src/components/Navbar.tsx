@@ -54,7 +54,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              <img src="/lovable-uploads/eed53564-63d3-42ef-ba27-84f9b10a41b0.png" alt="Gen AI Global Logo" className="h-8 w-auto md:h-10" />
+              <img src="/lovable-uploads/b7475833-17ac-4265-9aab-d6bc61ae42ce.png" alt="Gen AI Global Logo" className="h-8 w-auto md:h-10" />
             </Link>
           </div>
           
@@ -62,11 +62,13 @@ const Navbar = () => {
           <div className="hidden md:block">
             <NavigationMenu className="text-[hsl(var(--primary-foreground))]">
               <NavigationMenuList>
-                {[
-                  { to: '/', label: 'Home' },
-                  { to: '/about', label: 'About Us' },
-                  { to: '/community', label: 'Community' },
-                ].map((item) => (
+                 {[
+                   { to: '/', label: 'Home' },
+                   { to: '/about', label: 'About Us' },
+                   { to: '/community', label: 'Community' },
+                   { to: '/resources', label: 'Resources' },
+                   { to: '/spotlight', label: 'Spotlight' },
+                 ].map((item) => (
                   <NavigationMenuItem key={item.to}>
                     <NavigationMenuLink
                       asChild
@@ -100,11 +102,13 @@ const Navbar = () => {
       {/* Mobile Navigation Menu */}
       <div className={cn("md:hidden transition-all duration-300 overflow-hidden w-full", isMenuOpen ? "max-h-screen opacity-100" : "max-h-0 opacity-0")}> 
         <div className="px-3 pt-2 pb-3 space-y-1 shadow-sm overflow-y-auto max-h-screen bg-[hsl(var(--footer))]"> 
-          {[
-            { to: '/', label: 'Home' },
-            { to: '/about', label: 'About Us' },
-            { to: '/community', label: 'Community' },
-          ].map((item) => (
+           {[
+             { to: '/', label: 'Home' },
+             { to: '/about', label: 'About Us' },
+             { to: '/community', label: 'Community' },
+             { to: '/resources', label: 'Resources' },
+             { to: '/spotlight', label: 'Spotlight' },
+           ].map((item) => (
             <Link
               key={item.to}
               to={item.to}
